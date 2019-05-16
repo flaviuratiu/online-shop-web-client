@@ -1,10 +1,26 @@
 window.Shop = {
 
-    apiUrl: "http://localhost:8082/products",
+    apiUrl: "http://localhost:8082",
+
+    addProductToCart: function (productId) {
+        var data = {
+            'customerId': 1,
+            'productIds': [productId]
+        };
+
+        $.ajax({
+            url: Shop.apiUrl + "/carts",
+            method: "POST",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(data)
+        }).done(function (response) {
+            console.log(response);
+        });
+    },
 
     getProducts: function () {
         $.ajax({
-            url: Shop.apiUrl,
+            url: Shop.apiUrl + "/products",
             method: "GET"
         }).done(function (response) {
             console.log(response);
@@ -26,7 +42,7 @@ window.Shop = {
                         </div>  
                         
                         <div class="product-option-shop">
-                            <a class="add_to_cart_button" data-quantity="1" data-product_sku="" data-product_id="70" rel="nofollow" href="/canvas/shop/?add-to-cart=70">Add to cart</a>
+                            <a class="add_to_cart_button" data-quantity="1" data-product_sku="" data-product_id="${product.id}" rel="nofollow" href="/ustora/cart.html">Add to cart</a>
                         </div>                       
                     </div>
                   </div>
@@ -43,7 +59,15 @@ window.Shop = {
         console.log(divs);
 
         $('#products-row').html(divs);
+    },
+
+    bindEvents: function () {
+        $('#products-row').delegate('.add_to_cart_button', 'click', function () {
+            var id = $(this).data('product_id');
+            Shop.addProductToCart(id);
+        });
     }
 };
 
 Shop.getProducts();
+Shop.bindEvents();
