@@ -1,6 +1,6 @@
 window.Shop = {
 
-    apiUrl: "http://localhost:8082",
+    apiUrl: "http://localhost:8082/products",
 
     getProducts: function () {
         $.ajax({
@@ -10,7 +10,7 @@ window.Shop = {
             console.log(response);
             // reload items table
 
-            Shop.displayProducts(response);
+            Shop.displayProducts(response.content);
         });
     },
 
